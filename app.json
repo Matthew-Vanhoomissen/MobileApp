@@ -1,5 +1,6 @@
 {
   "expo": {
+    "scheme": "alarmapp",
     "name": "MobileApp",
     "slug": "MobileApp",
     "version": "1.0.0",
@@ -24,6 +25,9 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      "expo-router"
+    ]
   }
 }
