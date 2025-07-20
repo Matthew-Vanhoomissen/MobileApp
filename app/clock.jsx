@@ -2,18 +2,28 @@ import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import {Link} from 'expo-router'
 
+//Themed Imports
+import ThemedView from '../components/ThemedView'
+import ThemedText from '../components/ThemedText'
+
 const Clock = () => {
   return (
-    <View>
+    <ThemedView style={styles.container}>
       <Text> Clock </Text>
 
       <Link href="/timer">timer</Link>
-      <Link href="/stopwatch">stopwatch</Link>
+      <Link style={styles.black} href="/stopwatch">stopwatch</Link>
       <Link href="/">alarm</Link>
-    </View>
+    </ThemedView>
   )
 }
 
 export default Clock
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+    container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+})
