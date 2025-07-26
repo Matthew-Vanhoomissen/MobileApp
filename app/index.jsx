@@ -12,9 +12,9 @@ const Home = () => {
       <ThemedText>A New and Updated</ThemedText>
       <ThemedText>Alarm and Clock App</ThemedText>
 
-    <ThemedView style={[{backgroundColor: 'blue', }]}>
+    <ThemedView style={[{backgroundColor: 'blue', position:'absolute', bottom:0, left:0,width:100,height:100,}]}>
       <Link href="/timer">timer</Link>
-      <Link href="/clock"><Image source={WClock}/></Link>
+      <Link href="/clock"><Image source={WClock} /></Link>
       <Link href="/stopwatch">stopwatch</Link>
     </ThemedView>
       
@@ -32,7 +32,7 @@ export default Home
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        alignItems: 'center',
         justifyContent: 'center',
+        
     },
 })
