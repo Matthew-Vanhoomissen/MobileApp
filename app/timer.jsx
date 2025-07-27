@@ -2,6 +2,11 @@ import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import {Link} from 'expo-router'
 
+import WClock from '../assets/img/wclock.png'
+import Alarm from '../assets/img/alarm.png'
+import Stopwatch from '../assets/img/stopwatch.png'
+import TTimer from '../assets/img/timer.png'
+
 //Themed Imports
 import ThemedView from '../components/ThemedView'
 import ThemedText from '../components/ThemedText'
