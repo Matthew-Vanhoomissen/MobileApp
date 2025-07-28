@@ -13,9 +13,9 @@ const Home = () => {
   return (
     <ThemedView style={styles.container}>
 
-    <ThemedView>
-      <ThemedText>A New and Updated</ThemedText>
-      <ThemedText>Alarm and Clock App</ThemedText>
+    <ThemedView style={[{backgroundColor:'white', position:'absolute', justifyContent: 'center', alignItems: 'center', height: '7%', width: '100%'}]}>
+      <ThemedText style={[{color: 'black', fontSize: 18}]}>Alarms</ThemedText>
+      
     </ThemedView>
 
     <ThemedView style={[{position: 'absolute', height:'10%', width: '100%', bottom:0, backgroundColor: 'white', flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center'}]}>
