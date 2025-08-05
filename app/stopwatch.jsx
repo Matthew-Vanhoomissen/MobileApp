@@ -47,6 +47,10 @@ const Stopwatch = () => {
     setRunning(false);
   };
 
+  const mins = Math.floor(time/60);
+  const secs = time % 60;
+  const finalTime = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+
 
 
 
@@ -59,7 +63,7 @@ const Stopwatch = () => {
     </ThemedView>
 
     <ThemedView style={styles.timeContainer}>
-      <ThemedTime>{time}</ThemedTime>
+      <ThemedTime>{finalTime}</ThemedTime>
       
     </ThemedView>
     <ThemedView style={styles.buttonContainer}>
