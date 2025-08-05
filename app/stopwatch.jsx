@@ -1,6 +1,8 @@
-import { StyleSheet, Text, View, Image } from 'react-native'
+import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native'
 import React from 'react'
+import { useState, useRef } from 'react'
 import {Link} from 'expo-router'
+
 
 import WClock from '../assets/img/wclock.png'
 import Alarm from '../assets/img/alarm.png'
@@ -9,13 +11,46 @@ import Timer from '../assets/img/timer.png'
 //Themed Imports
 import ThemedView from '../components/ThemedView'
 import ThemedText from '../components/ThemedText'
+import ThemedTime from '../components/ThemedTime'
+
 const Stopwatch = () => {
+  //elapsed time
+  const [time, setTime] = useState(0);
+  //boolean if running
+  const [running, setRunning] = useState(false);
+  //store interval
+  const interval = useRef(null);
+  //store begin time
+  const startTime = useRef(0);
+
+  const startStopwatch = () => {
+    startTime.current = Date.now() - time * 1000;
+
+    interval.current = setInterval(() => {
+      setTime(Math.floor((Date.now() - startTime.current) / 1000));
+    }, 1000);
+
+    setRunning(true);
+  };
+
+
+
+
   return (
     <ThemedView style={styles.container}>
 
     <ThemedView style={[{backgroundColor:'white', position:'absolute', justifyContent: 'center', alignItems: 'center', height: '7%', width: '100%'}]}>
       <ThemedText style={[{color: 'black', fontSize: 18}]}>Stopwatch</ThemedText>
       
+    </ThemedView>
+
+    <ThemedView style={styles.timeContainer}>
+      <ThemedTime>00:00:00</ThemedTime>
+      
+    </ThemedView>
+    <ThemedView style={styles.buttonContainer}>
+      <TouchableOpacity style={styles.button}><ThemedText>Lap</ThemedText></TouchableOpacity>
+      <TouchableOpacity style={styles.button}><ThemedText>start</ThemedText></TouchableOpacity>
     </ThemedView>
 
     <ThemedView style={[{position: 'absolute', height:'10%', width: '100%', bottom:0, backgroundColor: 'white', flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center'}]}>
@@ -66,4 +101,36 @@ const styles = StyleSheet.create({
     flex: 1,
     
   },
+    timeContainer: {
+      position: 'absolute',
+      flex: 1,
+      alignItems: 'center',
+      justifyContent: 'center',
+      top: 200,
+      left: -50,
+      width: 500,
+      height: 50,
+      
+  },
+    buttonContainer: {
+      position: 'absolute',
+      flex:1,
+      alignItems: 'center',
+      
+      top: 300,
+      width: '100%',
+      height: 15,
+      flexDirection: 'row', 
+      justifyContent: 'space-around',
+      
+  },
+    button: {
+      borderRadius: 30,
+      width: 60,
+      height: 60,
+      backgroundColor: 'black',
+      alignItems: 'center',
+      justifyContent: 'center',
+  },
+    
 })
