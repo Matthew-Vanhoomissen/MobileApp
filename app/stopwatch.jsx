@@ -59,12 +59,19 @@ const Stopwatch = () => {
     </ThemedView>
 
     <ThemedView style={styles.timeContainer}>
-      <ThemedTime>00:00:00</ThemedTime>
+      <ThemedTime>{time}</ThemedTime>
       
     </ThemedView>
     <ThemedView style={styles.buttonContainer}>
+      {running ? (<>
       <TouchableOpacity style={styles.button}><ThemedText>Lap</ThemedText></TouchableOpacity>
-      <TouchableOpacity style={styles.button}><ThemedText>start</ThemedText></TouchableOpacity>
+      <TouchableOpacity style={styles.button} onPress={pauseStopwatch}><ThemedText>Pause</ThemedText></TouchableOpacity></>) 
+      : (<> <TouchableOpacity style={styles.button} onPress={resetStopwatch}><ThemedText>Reset</ThemedText></TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={startStopwatch}><ThemedText>Start</ThemedText></TouchableOpacity></>
+      )}
+      
+
+      
     </ThemedView>
 
     <ThemedView style={[{position: 'absolute', height:'10%', width: '100%', bottom:0, backgroundColor: 'white', flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center'}]}>
