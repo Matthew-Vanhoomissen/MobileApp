@@ -32,6 +32,20 @@ const Stopwatch = () => {
 
     setRunning(true);
   };
+  
+  const pauseStopwatch = () => {
+    clearInterval(interval.current);
+
+    setRunning(false);
+  };
+
+  const resetStopwatch = () => {
+    clearInterval(interval.current);
+
+    setTime(0);
+
+    setRunning(false);
+  };
 
 
 
