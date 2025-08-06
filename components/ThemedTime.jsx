@@ -6,7 +6,8 @@ const ThemedTime = ({style, ...props}) => {
     <Text style={[{
         color: 'white',
         backgroundColor: 'black',
-        fontSize: 50
+        fontSize: 50,
+        fontFamily: 'monospace',
     }, style]}
     {...props}/>
         
