@@ -1,12 +1,14 @@
 import { StyleSheet, Text, View, Image, TouchableOpacity, ScrollView, TextInput } from 'react-native'
 import React from 'react'
 import {Link} from 'expo-router'
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
+import { Audio } from 'expo-audio'
 
 import WClock from '../assets/img/wclock.png'
 import Alarm from '../assets/img/alarm.png'
 import Stopwatch from '../assets/img/stopwatch.png'
 import TTimer from '../assets/img/timer.png'
+
 
 //Themed Imports
 import ThemedView from '../components/ThemedView'
@@ -38,6 +40,32 @@ const Timer = () => {
     const scrollRefM = useRef(null);
     const scrollRefH = useRef(null);
     
+    //sound
+    const [sound, setSound] = useState();
+
+    const playSound = async () => {
+      const {sound: loadedSound } = await Audio.Sound.createAsync(
+        require('../assets/birds.mp3'),
+        { shouldPlay: true}
+      );
+      setSound(loadedSound);
+      
+    };
+
+    useEffect(() => {
+      
+      return sound
+        ? () => {
+            sound.unloadAsync(); // cleanup
+          }
+        : undefined;
+    }, [sound]);
+
+    useEffect(() => {
+      if (time <= 0 && hasRun) {
+        playSound();
+      }
+    }, [time, hasRun]);
 
     
 
@@ -79,6 +107,7 @@ const Timer = () => {
     setHasRun(false);
     setSeconds(0);
     setMinutes(0);
+    setHours(0);
   };
 
 
@@ -101,9 +130,18 @@ const Timer = () => {
     setHours(hrs[index]);
   }
 
-  const secs = Math.floor(time);
-  const mins = Math.floor(time/60);
-    
+
+
+
+  const secs = Math.floor(time) % 60;
+  const mins = Math.floor(time/60) % 60;
+  const hour = Math.floor(time/3600);
+
+  const mins2 = `${mins < 10 ? '0' : ''}${mins}`;
+  const secs2 = `${secs < 10 ? '0' : ''}${secs}`;
+  
+
+  const formattedTime = `${hour > 0 ? hour : '00'}:${mins > 0 ? mins2 : '00'}:${secs > 0 ? secs2 : '00'}`
 
 
   return (
@@ -145,7 +183,7 @@ const Timer = () => {
     </ThemedView>
 
     : <ThemedView style={styles.timer}>
-        <ThemedText>{secs}</ThemedText>
+        <ThemedText>{formattedTime}</ThemedText>
       </ThemedView>}
     <ThemedView style={styles.buttons}>
       {running ? (<><TouchableOpacity onPress={pauseTimer}><ThemedText>Pause</ThemedText></TouchableOpacity></>) : (hasRun ? (<><TouchableOpacity onPress={startTimer}><ThemedText>Resume</ThemedText></TouchableOpacity></>):(<><TouchableOpacity onPress={startTimer}><ThemedText>Start</ThemedText></TouchableOpacity></>))}
