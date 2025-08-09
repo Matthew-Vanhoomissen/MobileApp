@@ -33,8 +33,8 @@ const Timer = () => {
     //List height
     const ITEM_HEIGHT = 60;
     //list
-    const numbers = [...Array.from({ length: 60}, (_, i) => i), null, null];
-    const hrs = [...Array.from({ length: 24}, (_, i) => i), null, null];
+    const numbers = [null, ...Array.from({ length: 60}, (_, i) => i), null, null];
+    const hrs = [null, ...Array.from({ length: 24}, (_, i) => i), null, null];
     //scroll ref
     const scrollRefS = useRef(null);
     const scrollRefM = useRef(null);
@@ -115,19 +115,19 @@ const Timer = () => {
   const setScroll = (event) => {
     const offsetY = event.nativeEvent.contentOffset.y;
     const index = Math.round(offsetY / ITEM_HEIGHT);
-    setSeconds(numbers[index]);
+    setSeconds(numbers[index + 1]);
   }
 
   const setScrollM = (event) => {
     const offsetY = event.nativeEvent.contentOffset.y;
     const index = Math.round(offsetY / ITEM_HEIGHT);
-    setMinutes(numbers[index]);
+    setMinutes(numbers[index + 1]);
   }
 
   const setScrollH = (event) => {
     const offsetY = event.nativeEvent.contentOffset.y;
     const index = Math.round(offsetY / ITEM_HEIGHT);
-    setHours(hrs[index]);
+    setHours(hrs[index + 1]);
   }
 
 
@@ -153,8 +153,9 @@ const Timer = () => {
     </ThemedView>
     {!running && !hasRun ?
     <ThemedView style={styles.timer}>
-      <ScrollView ref={scrollRefS} snapToInterval={60} snapToAlignment="center"decelerationRate="fast" scrollEventThrottle={16} onScroll={setScroll}>
-        {numbers.map((num, idx) => (
+      
+      <ScrollView ref={scrollRefH} snapToInterval={60} snapToAlignment="center"decelerationRate="fast" scrollEventThrottle={16} onScroll={setScrollH}>
+        {hrs.map((num, idx) => (
         <ThemedView key={idx} style={[{height: 60}]}>
           <ThemedText style={[time === num]}>
             {num}
@@ -171,25 +172,36 @@ const Timer = () => {
         </ThemedView>
         ))}
       </ScrollView>
-      <ScrollView ref={scrollRefH} snapToInterval={60} snapToAlignment="center"decelerationRate="fast" scrollEventThrottle={16} onScroll={setScrollH}>
-        {hrs.map((num, idx) => (
+      <ScrollView ref={scrollRefS} snapToInterval={60} snapToAlignment="center"decelerationRate="fast" scrollEventThrottle={16} onScroll={setScroll}>
+        {numbers.map((num, idx) => (
         <ThemedView key={idx} style={[{height: 60}]}>
           <ThemedText style={[time === num]}>
             {num}
           </ThemedText>
+          
         </ThemedView>
         ))}
       </ScrollView>
+      <ThemedView style={styles.label1}>
+        <ThemedText>hours</ThemedText>
+      </ThemedView>
+      <ThemedView style={styles.label2}>
+        <ThemedText>mins</ThemedText>
+      </ThemedView>
+      <ThemedView style={styles.label3}>
+        <ThemedText>secs</ThemedText>
+      </ThemedView>
     </ThemedView>
 
-    : <ThemedView style={styles.timer}>
-        <ThemedText>{formattedTime}</ThemedText>
+    : <ThemedView style={styles.timeLabel}>
+        <ThemedText style={[{fontSize: 40}]}>{formattedTime}</ThemedText>
       </ThemedView>}
-    <ThemedView style={styles.buttons}>
-      {running ? (<><TouchableOpacity onPress={pauseTimer}><ThemedText>Pause</ThemedText></TouchableOpacity></>) : (hasRun ? (<><TouchableOpacity onPress={startTimer}><ThemedText>Resume</ThemedText></TouchableOpacity></>):(<><TouchableOpacity onPress={startTimer}><ThemedText>Start</ThemedText></TouchableOpacity></>))}
+    <ThemedView style={styles.buttonContainer}>
+      <TouchableOpacity onPress={cancelTimer} style={styles.buttons}><ThemedText>Cancel</ThemedText></TouchableOpacity>
+      {running ? (<><TouchableOpacity onPress={pauseTimer} style={styles.buttons}><ThemedText>Pause</ThemedText></TouchableOpacity></>) : (hasRun ? (<><TouchableOpacity onPress={startTimer} style={styles.buttons}><ThemedText>Resume</ThemedText></TouchableOpacity></>):(<><TouchableOpacity onPress={startTimer} style={styles.buttons}><ThemedText>Start</ThemedText></TouchableOpacity></>))}
       
       
-      <TouchableOpacity onPress={cancelTimer}><ThemedText>Cancel</ThemedText></TouchableOpacity>
+      
     </ThemedView>
     <ThemedView style={[{position: 'absolute', height:'10%', width: '100%', bottom:0, backgroundColor: 'white', flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center'}]}>
 
@@ -240,19 +252,65 @@ const styles = StyleSheet.create({
     
   },
   timer: {
-
-    top: '50%',
-    left: '30%',
+    position: 'absolute',
+    top: '25%',
+    left: '25%',
     overflow: 'hidden',
     height: 180,
-    width: '50%',
+    width: '70%',
     flexDirection: 'row',
+    
     
     
   },
   buttons: {
-  
+    borderRadius: 30,
+    width: 60,
+    height: 60,
+    backgroundColor: 'black',
+    alignItems: 'center',
+    justifyContent: 'center',
     top: '0%',
+    left: '0%',
+  },
+  buttonContainer: {
+      position: 'absolute',
+     
+      alignItems: 'center',
+      
+      top: 400,
+      width: '100%',
+      height: 15,
+      flexDirection: 'row', 
+      justifyContent: 'space-around',
+      
+  },
+  timeLabel: {
+    position: 'absolute',
+    top: '30%',
     left: '30%',
-  }
+    
+    height: 180,
+    width: '70%',
+  },  
+  label1: {
+    flexDirection: 'row',
+    top: '33%',
+    left: '7%',
+    position: 'absolute',
+    
+  },
+  label2: {
+    flexDirection: 'row',
+    top: '33%',
+    left: '40%',
+    position: 'absolute',
+  },
+  label3: {
+    flexDirection: 'row',
+    top: '33%',
+    left: '73%',
+    position: 'absolute',
+  },
+  
 })
