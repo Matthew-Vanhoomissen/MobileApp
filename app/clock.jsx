@@ -23,6 +23,7 @@ const Clock = () => {
   const getTime = async () => {
     
     try {
+      
       const geoLoad = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
           city
         )}&key=${APIKey}`);
@@ -32,7 +33,25 @@ const Clock = () => {
         throw new Error("No City Found");
       }
       const { lat, lng} = geoData.results[0].geometry.location;
-      console.log(lat);
+      
+      const currentTime = Math.floor(Date.now() /1000);
+      const timeLoad = await fetch(
+        `https://maps.googleapis.com/maps/api/timezone/json?location=${lat},${lng}&timestamp=${currentTime}&key=${APIKey}`
+      );
+      const timeData = await timeLoad.json();
+      
+      if(timeData.status !== "OK") {
+        throw new Error("Timezone API Error");
+      }
+      const nowTime = (currentTime + timeData.dstOffset + timeData.rawOffset) * 1000;
+      
+      const locationTime = new Date(
+        (nowTime))
+      //setTime(locationTime.toLocaleDateString());
+      setTime(nowTime);
+      console.log("Hello");
+      setError("");
+
     } catch (err) {
       setError(err.message);
       setTime("");
@@ -53,7 +72,7 @@ const Clock = () => {
         onChangeText={setCity}
         placeholder="City Name"/>
       <TouchableOpacity onPress={getTime}><ThemedText>Button</ThemedText></TouchableOpacity>
-      <ThemedText></ThemedText>
+      <ThemedText>Time in {city}: {time}</ThemedText>
     </ThemedView>
 
     <ThemedView style={[{position: 'absolute', height:'10%', width: '100%', bottom:0, backgroundColor: 'white', flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center'}]}>
