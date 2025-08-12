@@ -1,5 +1,5 @@
-import { StyleSheet, Text, View, Image } from 'react-native'
-import React from 'react'
+import { StyleSheet, Text, View, Image, TouchableOpacity, TextInput } from 'react-native'
+import {React, useState} from 'react'
 import {Link} from 'expo-router'
 
 import WClock from '../assets/img/wclock.png'
@@ -9,14 +9,51 @@ import Timer from '../assets/img/timer.png'
 //Themed Imports
 import ThemedView from '../components/ThemedView'
 import ThemedText from '../components/ThemedText'
+import { isSearchBarAvailableForCurrentPlatform } from 'react-native-screens'
 
 const Clock = () => {
+
+  const APIKey = "AIzaSyC6U2_01lYxMxl_nWr2XCCLBvB95duuVNc";
+  //constants for name, time, and error
+  const [time, setTime] = useState("");
+  const [city, setCity] = useState("");
+  const [error, setError] = useState("");
+
+  //function to get time
+  const getTime = async () => {
+    
+    try {
+      const geoLoad = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
+          city
+        )}&key=${APIKey}`);
+      const geoData = await geoLoad.json();
+
+      if(!geoData.results.length) {
+        throw new Error("No City Found");
+      }
+      const { lat, lng} = geoData.results[0].geometry.location;
+      console.log(lat);
+    } catch (err) {
+      setError(err.message);
+      setTime("");
+    }
+  } 
   return (
     <ThemedView style={styles.container}>
 
     <ThemedView style={[{backgroundColor:'white', position:'absolute', justifyContent: 'center', alignItems: 'center', height: '7%', width: '100%'}]}>
       <ThemedText style={[{color: 'black', fontSize: 18}]}>World Clock</ThemedText>
       
+    </ThemedView>
+    <ThemedView style={styles.time}>
+      <ThemedText>Hello</ThemedText>
+      <TextInput
+        type="text"
+        value={city}
+        onChangeText={setCity}
+        placeholder="City Name"/>
+      <TouchableOpacity onPress={getTime}><ThemedText>Button</ThemedText></TouchableOpacity>
+      <ThemedText></ThemedText>
     </ThemedView>
 
     <ThemedView style={[{position: 'absolute', height:'10%', width: '100%', bottom:0, backgroundColor: 'white', flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center'}]}>
@@ -67,4 +104,8 @@ const styles = StyleSheet.create({
     flex: 1,
    
   },
+    time: {
+      top: '50%',
+      left: '50%'
+    }
 })
