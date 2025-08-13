@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, Image, TouchableOpacity, TextInput } from 'react-native'
-import {React, useState} from 'react'
+import {React, useState, useRef} from 'react'
 import {Link} from 'expo-router'
 
 import WClock from '../assets/img/wclock.png'
@@ -9,7 +9,7 @@ import Timer from '../assets/img/timer.png'
 //Themed Imports
 import ThemedView from '../components/ThemedView'
 import ThemedText from '../components/ThemedText'
-import { isSearchBarAvailableForCurrentPlatform } from 'react-native-screens'
+
 
 const Clock = () => {
 
@@ -18,6 +18,7 @@ const Clock = () => {
   const [time, setTime] = useState("");
   const [city, setCity] = useState("");
   const [error, setError] = useState("");
+  const interval = useRef(null);
 
   //function to get time
   const getTime = async () => {
@@ -49,7 +50,10 @@ const Clock = () => {
         (nowTime))
       //setTime(locationTime.toLocaleDateString());
       setTime(nowTime);
-      console.log("Hello");
+      const secs = Math.floor(nowTime/1000) % 60;
+      console.log(secs);
+      
+      
       setError("");
 
     } catch (err) {
@@ -57,6 +61,15 @@ const Clock = () => {
       setTime("");
     }
   } 
+  const startClock = () => {
+    if(interval.current) {
+      clearInterval(interval.current);
+    }
+    getTime();
+    interval.current = setInterval(() => {
+        getTime();
+      }, 1000);
+    }
   return (
     <ThemedView style={styles.container}>
 
@@ -71,7 +84,7 @@ const Clock = () => {
         value={city}
         onChangeText={setCity}
         placeholder="City Name"/>
-      <TouchableOpacity onPress={getTime}><ThemedText>Button</ThemedText></TouchableOpacity>
+      <TouchableOpacity onPress={startClock}><ThemedText>Button</ThemedText></TouchableOpacity>
       <ThemedText>Time in {city}: {time}</ThemedText>
     </ThemedView>
 
@@ -125,6 +138,6 @@ const styles = StyleSheet.create({
   },
     time: {
       top: '50%',
-      left: '50%'
+      left: '40%'
     }
 })
