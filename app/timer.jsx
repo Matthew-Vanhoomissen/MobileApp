@@ -71,7 +71,7 @@ const Timer = () => {
 
   const startTimer = () => {
     
-    const currentTime = seconds + minutes*60 + hours*3600;
+    const currentTime = time > 0 ? time : seconds + minutes*60 + hours*3600;
     startTime.current = Date.now();
     
     setTime(currentTime);

@@ -18,6 +18,7 @@ const Clock = () => {
   const [time, setTime] = useState("");
   const [city, setCity] = useState("");
   const [error, setError] = useState("");
+  const [fTime, setFTime] = useState("");
   const interval = useRef(null);
 
   //function to get time
@@ -51,7 +52,11 @@ const Clock = () => {
       //setTime(locationTime.toLocaleDateString());
       setTime(nowTime);
       const secs = Math.floor(nowTime/1000) % 60;
-      console.log(secs);
+      const mins = Math.floor(Math.floor(nowTime/1000)/60) % 60;
+      const hours = Math.floor(Math.floor(Math.floor(nowTime/1000)/60)/60) % 12;
+      setFTime(`${hours}:${mins}:${secs}`);
+      
+      
       
       
       setError("");
@@ -85,7 +90,7 @@ const Clock = () => {
         onChangeText={setCity}
         placeholder="City Name"/>
       <TouchableOpacity onPress={startClock}><ThemedText>Button</ThemedText></TouchableOpacity>
-      <ThemedText>Time in {city}: {time}</ThemedText>
+      <ThemedText>Time in {city}: {fTime}</ThemedText>
     </ThemedView>
 
     <ThemedView style={[{position: 'absolute', height:'10%', width: '100%', bottom:0, backgroundColor: 'white', flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center'}]}>
