@@ -20,6 +20,7 @@ const Clock = () => {
   const [error, setError] = useState("");
   const [fTime, setFTime] = useState("");
   const interval = useRef(null);
+  
 
   //function to get time
   const getTime = async () => {
@@ -89,8 +90,9 @@ const Clock = () => {
         value={city}
         onChangeText={setCity}
         placeholder="City Name"/>
-      <TouchableOpacity onPress={startClock}><ThemedText>Button</ThemedText></TouchableOpacity>
-      <ThemedText>Time in {city}: {fTime}</ThemedText>
+      <TouchableOpacity onPress={startClock}><ThemedText>Enter</ThemedText></TouchableOpacity>
+      <ThemedText>{fTime}</ThemedText>
+      <ThemedText>{city}</ThemedText>
     </ThemedView>
 
     <ThemedView style={[{position: 'absolute', height:'10%', width: '100%', bottom:0, backgroundColor: 'white', flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center'}]}>
