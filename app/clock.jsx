@@ -84,13 +84,19 @@ const Clock = () => {
       
     </ThemedView>
     <ThemedView style={styles.time}>
-      <ThemedText>Hello</ThemedText>
+      
       <TextInput
         type="text"
         value={city}
         onChangeText={setCity}
-        placeholder="City Name"/>
-      <TouchableOpacity onPress={startClock}><ThemedText>Enter</ThemedText></TouchableOpacity>
+        placeholder="City Name                                       "
+        style={styles.timeText}/>
+      <ThemedText>   </ThemedText>
+      <TouchableOpacity onPress={startClock}><ThemedText style={styles.timeText}>Enter</ThemedText></TouchableOpacity>
+
+      
+    </ThemedView>
+    <ThemedView style={styles.time2}>
       <ThemedText>{fTime}</ThemedText>
       <ThemedText>{city}</ThemedText>
     </ThemedView>
@@ -144,7 +150,25 @@ const styles = StyleSheet.create({
    
   },
     time: {
+      top: '10%',
+      left: '5%',
+      width: '100%',
+      flexDirection: 'row',
+      
+      
+    },
+    timeText: {
+      fontSize: 20,
+      
+      borderColor: 'black', // Outline color
+      borderWidth: 1,      // Outline width
+      borderRadius: 5,
+      paddingHorizontal: 5,
+      backgroundColor: 'light-grey'
+    },
+    time2: {
       top: '50%',
-      left: '40%'
+      left: '40%',
     }
+
 })
