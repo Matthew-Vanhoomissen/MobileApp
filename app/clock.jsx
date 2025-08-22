@@ -55,7 +55,7 @@ const Clock = () => {
       const secs = Math.floor(nowTime/1000) % 60;
       const mins = Math.floor(Math.floor(nowTime/1000)/60) % 60;
       const hours = Math.floor(Math.floor(Math.floor(nowTime/1000)/60)/60) % 12;
-      setFTime(`${hours}:${mins}:${secs}`);
+      setFTime(`${hours}:${mins < 10 ? "0" : ""}${mins}`);
       
       
       
@@ -97,8 +97,9 @@ const Clock = () => {
       
     </ThemedView>
     <ThemedView style={styles.time2}>
-      <ThemedText>{fTime}</ThemedText>
-      <ThemedText>{city}</ThemedText>
+      <ThemedText style={styles.clockList}>{city}</ThemedText>
+      <ThemedText style={styles.clockList}>{fTime}</ThemedText>
+      
     </ThemedView>
 
     <ThemedView style={[{position: 'absolute', height:'10%', width: '100%', bottom:0, backgroundColor: 'white', flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center'}]}>
@@ -179,6 +180,11 @@ const styles = StyleSheet.create({
     time2: {
       top: '50%',
       left: '40%',
-    }
+      flexDirection: 'row',
+      width: 300,
+    },
+    clockList: {
+      fontSize: 30,
+    },
 
 })
