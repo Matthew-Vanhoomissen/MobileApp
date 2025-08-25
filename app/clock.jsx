@@ -20,6 +20,8 @@ const Clock = () => {
   const [error, setError] = useState("");
   const [fTime, setFTime] = useState("");
   const interval = useRef(null);
+  const [tList, settList] = useState([]);
+  const [cList, setcList] = useState([]);
   
 
   //function to get time
@@ -46,16 +48,18 @@ const Clock = () => {
       if(timeData.status !== "OK") {
         throw new Error("Timezone API Error");
       }
-      const nowTime = (currentTime + timeData.dstOffset + timeData.rawOffset) * 1000;
+      const nowTime = currentTime + (timeData.dstOffset + timeData.rawOffset) * 1000;
       
       const locationTime = new Date(
         (nowTime))
       //setTime(locationTime.toLocaleDateString());
       setTime(nowTime);
-      const secs = Math.floor(nowTime/1000) % 60;
-      const mins = Math.floor(Math.floor(nowTime/1000)/60) % 60;
-      const hours = Math.floor(Math.floor(Math.floor(nowTime/1000)/60)/60) % 12;
+      setTime(currentTime);
+      const secs = Math.floor(currentTime/1000) % 60;
+      const mins = Math.floor(Math.floor(currentTime/1000)/60) % 60;
+      const hours = Math.floor(Math.floor(Math.floor(currentTime/1000)/60)/60) % 12;
       setFTime(`${hours}:${mins < 10 ? "0" : ""}${mins}`);
+      
       
       
       
@@ -67,6 +71,10 @@ const Clock = () => {
       setTime("");
     }
   } 
+  const addList = () => {
+    settList(prev => [...prev, ...fTime]);
+    setcList(prev => [...prev, ...city]);
+  }
   const startClock = () => {
     if(interval.current) {
       clearInterval(interval.current);
@@ -92,13 +100,13 @@ const Clock = () => {
         placeholder="City Name"
         style={styles.timeText}/>
       <ThemedText>   </ThemedText>
-      <TouchableOpacity onPress={startClock}><ThemedText style={styles.timeText2}>Enter</ThemedText></TouchableOpacity>
+      <TouchableOpacity onPress={() => {startClock(); addList();}}><ThemedText style={styles.timeText2}>Enter</ThemedText></TouchableOpacity>
 
       
     </ThemedView>
     <ThemedView style={styles.time2}>
-      <ThemedText style={styles.clockList}>{city}</ThemedText>
-      <ThemedText style={styles.clockList}>{fTime}</ThemedText>
+      <ThemedText style={styles.clockList}>{cList}</ThemedText>
+      <ThemedText style={styles.clockList}>{tList}</ThemedText>
       
     </ThemedView>
 
@@ -179,7 +187,7 @@ const styles = StyleSheet.create({
     },
     time2: {
       top: '50%',
-      left: '40%',
+      left: '10%',
       flexDirection: 'row',
       width: 300,
     },
