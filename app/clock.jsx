@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, Image, TouchableOpacity, TextInput } from 'react-native'
-import {React, useState, useRef} from 'react'
+import {React, useState, useRef, useEffect} from 'react'
 import {Link} from 'expo-router'
 
 import WClock from '../assets/img/wclock.png'
@@ -22,9 +22,19 @@ const Clock = () => {
   const interval = useRef(null);
   const [tList, settList] = useState([]);
   const [cList, setcList] = useState([]);
+  const [remoteTime, setRemoteTime] = useState("");
+  const [remoteTimeM, setRemoteTimeM] = useState("");
   
+  //Start and set a time to current location
+  useEffect(() => {
 
-  //function to get time
+    interval.current = setInterval(() => {
+      const temp = new Date(Date.now());
+      setRemoteTimeM(temp.getMinutes());
+      setRemoteTime(temp.getHours());
+      }, 1000);
+  }, []);
+  //function to get time based on city
   const getTime = async () => {
     
     try {
@@ -48,16 +58,20 @@ const Clock = () => {
       if(timeData.status !== "OK") {
         throw new Error("Timezone API Error");
       }
-      const nowTime = currentTime + (timeData.dstOffset + timeData.rawOffset) * 1000;
+      const nowTime = (currentTime + timeData.dstOffset + timeData.rawOffset) * 1000;
       
       const locationTime = new Date(
         (nowTime))
       //setTime(locationTime.toLocaleDateString());
       setTime(nowTime);
-      setTime(currentTime + timeData.dstOffset);
-      const secs = Math.floor(currentTime/1000) % 60;
-      const mins = Math.floor(Math.floor(currentTime/1000)/60) % 60;
-      const hours = Math.floor(Math.floor(Math.floor(currentTime/1000)/60)/60) % 12;
+      
+      
+      const hours = Math.floor(Math.floor(Math.floor(nowTime/1000)/60)/60) % 12;
+      const temp = getHourOffset(remoteTime, hours);
+      
+      
+      settList(prev => [...prev, temp])
+      
       setFTime(`${hours}:${mins < 10 ? "0" : ""}${mins}`);
       
       
@@ -71,19 +85,16 @@ const Clock = () => {
       setTime("");
     }
   } 
+  function getHourOffset(baseHour, targetHour) {
+    let temp = (targetHour - baseHour + 24) % 24;
+    if (temp > 12) diff -= 24; 
+    return temp;
+  }
   const addList = () => {
     settList(prev => [...prev, ...fTime]);
     setcList(prev => [...prev, ...city]);
   }
-  const startClock = () => {
-    if(interval.current) {
-      clearInterval(interval.current);
-    }
-    getTime();
-    interval.current = setInterval(() => {
-        getTime();
-      }, 1000);
-    }
+
   return (
     <ThemedView style={styles.container}>
 
@@ -100,13 +111,16 @@ const Clock = () => {
         placeholder="City Name"
         style={styles.timeText}/>
       <ThemedText>   </ThemedText>
-      <TouchableOpacity onPress={() => {startClock(); addList();}}><ThemedText style={styles.timeText2}>Enter</ThemedText></TouchableOpacity>
+      <TouchableOpacity onPress={() => {getTime()}}><ThemedText style={styles.timeText2}>Enter</ThemedText></TouchableOpacity>
 
       
     </ThemedView>
     <ThemedView style={styles.time2}>
-      <ThemedText style={styles.clockList}>{cList}</ThemedText>
-      <ThemedText style={styles.clockList}>{tList}</ThemedText>
+      <ThemedText style={styles.clockList}>{city}</ThemedText>
+      {Array.isArray(tList) && tList.map((h, i) => (
+        <ThemedText key={i} style={styles.clockList}>      {h + remoteTime}:{remoteTimeM}      </ThemedText>
+      ))}
+      <ThemedText style={styles.clockList}>{remoteTime > 12 ? remoteTime - 12 : remoteTime}:{remoteTimeM < 10 ? "0" : ""}{remoteTimeM}</ThemedText>
       
     </ThemedView>
 
