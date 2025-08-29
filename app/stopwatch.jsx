@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image, TouchableOpacity, ScrollView } from 'react-native'
+import { StyleSheet, Text, View, Image, TouchableOpacity, ScrollView, } from 'react-native'
 import React from 'react'
 import { useState, useRef } from 'react'
 import {Link} from 'expo-router'
@@ -24,6 +24,7 @@ const Stopwatch = () => {
   const startTime = useRef(0);
   //laps
   const [laps, setLaps] = useState([]);
+  
 
   const startStopwatch = () => {
     startTime.current = Date.now() - time * 1000;
@@ -161,7 +162,7 @@ const styles = StyleSheet.create({
   },
     buttonContainer: {
       position: 'absolute',
-      flex:1,
+      flex: 1,
       alignItems: 'center',
       
       top: 300,

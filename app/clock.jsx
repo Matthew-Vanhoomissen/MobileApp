@@ -54,7 +54,7 @@ const Clock = () => {
         (nowTime))
       //setTime(locationTime.toLocaleDateString());
       setTime(nowTime);
-      setTime(currentTime);
+      setTime(currentTime + timeData.dstOffset);
       const secs = Math.floor(currentTime/1000) % 60;
       const mins = Math.floor(Math.floor(currentTime/1000)/60) % 60;
       const hours = Math.floor(Math.floor(Math.floor(currentTime/1000)/60)/60) % 12;
