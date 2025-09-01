@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image, TouchableOpacity, TextInput } from 'react-native'
+import { StyleSheet, Text, View, Image, TouchableOpacity, TextInput, ScrollView } from 'react-native'
 import {React, useState, useRef, useEffect} from 'react'
 import {Link} from 'expo-router'
 
@@ -102,6 +102,9 @@ const Clock = () => {
       <ThemedText style={[{color: 'black', fontSize: 18}]}>World Clock</ThemedText>
       
     </ThemedView>
+    <ThemedView style={styles.topTime}>
+      <ThemedText style={styles.clockList}>{remoteTime > 12 ? remoteTime - 12 : remoteTime}:{remoteTimeM < 10 ? "0" : ""}{remoteTimeM}{remoteTime >= 12 ? "pm" : "am" }</ThemedText>
+    </ThemedView>
     <ThemedView style={styles.time}>
       
       <TextInput
@@ -115,13 +118,14 @@ const Clock = () => {
 
       
     </ThemedView>
+
     <ThemedView style={styles.time2}>
+      <ScrollView>
       <ThemedText style={styles.clockList}>{city}</ThemedText>
       {Array.isArray(tList) && tList.map((h, i) => (
         <ThemedText key={i} style={styles.clockList}>      {h + remoteTime}:{remoteTimeM}      </ThemedText>
       ))}
-      <ThemedText style={styles.clockList}>{remoteTime > 12 ? remoteTime - 12 : remoteTime}:{remoteTimeM < 10 ? "0" : ""}{remoteTimeM}</ThemedText>
-      
+      </ScrollView>
     </ThemedView>
 
     <ThemedView style={[{position: 'absolute', height:'10%', width: '100%', bottom:0, backgroundColor: 'white', flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center'}]}>
@@ -173,7 +177,7 @@ const styles = StyleSheet.create({
    
   },
     time: {
-      top: '10%',
+      top: '5%',
       left: '3%',
       width: '100%',
       flexDirection: 'row',
@@ -197,7 +201,8 @@ const styles = StyleSheet.create({
       borderWidth: 1,      // Outline width
       borderRadius: 5,
       paddingHorizontal: 5,
-      backgroundColor: 'light-grey'
+      backgroundColor: 'light-grey',
+      
     },
     time2: {
       top: '50%',
@@ -207,6 +212,11 @@ const styles = StyleSheet.create({
     },
     clockList: {
       fontSize: 30,
+
+    },
+    topTime: {
+      top: '15%',
+      left: '3%',
     },
 
 })
