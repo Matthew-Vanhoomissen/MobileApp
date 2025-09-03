@@ -123,7 +123,7 @@ const Clock = () => {
       <ScrollView>
       <ThemedText style={styles.clockList}>{city}</ThemedText>
       {Array.isArray(tList) && tList.map((h, i) => (
-        <ThemedText key={i} style={styles.clockList}>      {h + remoteTime}:{remoteTimeM}      </ThemedText>
+        <ThemedText key={i} style={styles.clockList}>     {h + remoteTime}:{remoteTimeM}      </ThemedText>
       ))}
       </ScrollView>
     </ThemedView>
