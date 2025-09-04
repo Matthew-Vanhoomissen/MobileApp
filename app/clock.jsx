@@ -39,15 +39,18 @@ const Clock = () => {
     
     try {
       
+      
       const geoLoad = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
           city
         )}&key=${APIKey}`);
       const geoData = await geoLoad.json();
 
       if(!geoData.results.length) {
+        console.log("No City");
         throw new Error("No City Found");
       }
       const { lat, lng} = geoData.results[0].geometry.location;
+      
       
       const currentTime = Math.floor(Date.now() /1000);
       const timeLoad = await fetch(
@@ -58,21 +61,23 @@ const Clock = () => {
       if(timeData.status !== "OK") {
         throw new Error("Timezone API Error");
       }
+      
       const nowTime = (currentTime + timeData.dstOffset + timeData.rawOffset) * 1000;
       
-      const locationTime = new Date(
-        (nowTime))
+      
       //setTime(locationTime.toLocaleDateString());
       setTime(nowTime);
       
       
       const hours = Math.floor(Math.floor(Math.floor(nowTime/1000)/60)/60) % 12;
+      
       const temp = getHourOffset(remoteTime, hours);
+      console.log(temp);
       
       
       settList(prev => [...prev, temp])
       
-      setFTime(`${hours}:${mins < 10 ? "0" : ""}${mins}`);
+      
       
       
       
@@ -85,15 +90,18 @@ const Clock = () => {
       setTime("");
     }
   } 
+
   function getHourOffset(baseHour, targetHour) {
-    let temp = (targetHour - baseHour + 24) % 24;
-    if (temp > 12) diff -= 24; 
-    return temp;
+    let diff = (targetHour - baseHour + 24) % 24; 
+
+    // if difference is > 12, take the negative shorter path
+    if (diff > 12) {
+      diff -= 24; 
+    }
+
+    return diff;
   }
-  const addList = () => {
-    settList(prev => [...prev, ...fTime]);
-    setcList(prev => [...prev, ...city]);
-  }
+  
 
   return (
     <ThemedView style={styles.container}>
