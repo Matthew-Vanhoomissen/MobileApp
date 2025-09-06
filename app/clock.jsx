@@ -107,8 +107,15 @@ const Clock = () => {
     return diff;
   }
   const deleteCity = (inputCity, inputTime) => {
-    console.log(check);
+    console.log("Check");
   }
+
+  const renderButton = (inputCity, inputTime) => (
+    <TouchableOpacity style={styles.deleteButton} onPress={() => deleteCity(inputCity, inputTime)}>
+        <ThemedText>Delete</ThemedText>
+    </TouchableOpacity>
+
+  )
   
 
   return (
@@ -141,11 +148,13 @@ const Clock = () => {
       <ScrollView>
       
       {Array.isArray(tList) && tList.map((h, i) => (
-        <ThemedView style={styles.list}>
-          <ThemedText style={styles.clockList}>{cList[i]}</ThemedText>
-          <ThemedText key={i} style={styles.clockList}>     {h + remoteTime > 12 ? h + remoteTime - 12 : h + remoteTime}:{remoteTimeM < 10 ? "0" : ""}{remoteTimeM}{h + remoteTime >= 12 ? "pm" : "am"}      </ThemedText>
+        <Swipeable key={i} renderButton={() => renderButton(cList[i], h)}>
+          <ThemedView style={styles.list}>
+            <ThemedText style={styles.clockList}>{cList[i]}</ThemedText>
+            <ThemedText key={i} style={styles.clockList}>     {h + remoteTime > 12 ? h + remoteTime - 12 : h + remoteTime}:{remoteTimeM < 10 ? "0" : ""}{remoteTimeM}{h + remoteTime >= 12 ? "pm" : "am"}      </ThemedText>
           
-        </ThemedView>
+          </ThemedView>
+        </Swipeable>
       ))}
       </ScrollView>
       
@@ -245,5 +254,11 @@ const styles = StyleSheet.create({
       flexDirection: 'row',
       justifyContent: 'space-between',
     },
+    deleteButton: {
+      backgroundColor: 'red',
+      justifyContent: 'center',
+      alignItems: 'center',
+      width: 80,
+    }
 
 })
