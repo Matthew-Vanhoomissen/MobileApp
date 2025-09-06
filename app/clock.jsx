@@ -1,5 +1,6 @@
 import { StyleSheet, Text, View, Image, TouchableOpacity, TextInput, ScrollView } from 'react-native'
 import {React, useState, useRef, useEffect} from 'react'
+import { Swipeable } from "react-native-gesture-handler";
 import {Link} from 'expo-router'
 
 import WClock from '../assets/img/wclock.png'
@@ -69,14 +70,14 @@ const Clock = () => {
       setTime(nowTime);
       
       
-      const hours = Math.floor(Math.floor(Math.floor(nowTime/1000)/60)/60) % 12;
+      const hours = Math.floor(Math.floor(Math.floor(nowTime/1000)/60)/60) % 24;
       
       const temp = getHourOffset(remoteTime, hours);
       console.log(temp);
       
       
-      settList(prev => [...prev, temp])
-      
+      settList(prev => [...prev, temp]);
+      setcList(prev => [...prev, city]);
       
       
       
@@ -92,14 +93,21 @@ const Clock = () => {
   } 
 
   function getHourOffset(baseHour, targetHour) {
-    let diff = (targetHour - baseHour + 24) % 24; 
+    
+    let diff = (targetHour - baseHour); 
 
     // if difference is > 12, take the negative shorter path
     if (diff > 12) {
       diff -= 24; 
     }
+    if (diff < -12) {
+      diff += 24;
+    }
 
     return diff;
+  }
+  const deleteCity = (inputCity, inputTime) => {
+    console.log(check);
   }
   
 
@@ -113,6 +121,7 @@ const Clock = () => {
     <ThemedView style={styles.topTime}>
       <ThemedText style={styles.clockList}>{remoteTime > 12 ? remoteTime - 12 : remoteTime}:{remoteTimeM < 10 ? "0" : ""}{remoteTimeM}{remoteTime >= 12 ? "pm" : "am" }</ThemedText>
     </ThemedView>
+    
     <ThemedView style={styles.time}>
       
       <TextInput
@@ -128,12 +137,18 @@ const Clock = () => {
     </ThemedView>
 
     <ThemedView style={styles.time2}>
+      
       <ScrollView>
-      <ThemedText style={styles.clockList}>{city}</ThemedText>
+      
       {Array.isArray(tList) && tList.map((h, i) => (
-        <ThemedText key={i} style={styles.clockList}>     {h + remoteTime}:{remoteTimeM}      </ThemedText>
+        <ThemedView style={styles.list}>
+          <ThemedText style={styles.clockList}>{cList[i]}</ThemedText>
+          <ThemedText key={i} style={styles.clockList}>     {h + remoteTime > 12 ? h + remoteTime - 12 : h + remoteTime}:{remoteTimeM < 10 ? "0" : ""}{remoteTimeM}{h + remoteTime >= 12 ? "pm" : "am"}      </ThemedText>
+          
+        </ThemedView>
       ))}
       </ScrollView>
+      
     </ThemedView>
 
     <ThemedView style={[{position: 'absolute', height:'10%', width: '100%', bottom:0, backgroundColor: 'white', flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center'}]}>
@@ -225,6 +240,10 @@ const styles = StyleSheet.create({
     topTime: {
       top: '15%',
       left: '3%',
+    },
+    list: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
     },
 
 })
