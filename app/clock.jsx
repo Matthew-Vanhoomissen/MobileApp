@@ -107,10 +107,12 @@ const Clock = () => {
     return diff;
   }
   const deleteCity = (inputCity, inputTime) => {
+    setcList(prev => prev.filter(item => item !== inputCity))
+    settList(prev => prev.filter(item => item !== inputTime))
     console.log("Check");
   }
 
-  const renderButton = (inputCity, inputTime) => (
+  const renderRightActions = (inputCity, inputTime) => (
     <TouchableOpacity style={styles.deleteButton} onPress={() => deleteCity(inputCity, inputTime)}>
         <ThemedText>Delete</ThemedText>
     </TouchableOpacity>
@@ -126,7 +128,7 @@ const Clock = () => {
       
     </ThemedView>
     <ThemedView style={styles.topTime}>
-      <ThemedText style={styles.clockList}>{remoteTime > 12 ? remoteTime - 12 : remoteTime}:{remoteTimeM < 10 ? "0" : ""}{remoteTimeM}{remoteTime >= 12 ? "pm" : "am" }</ThemedText>
+      <ThemedText style={styles.clockList}>Current Time: {remoteTime > 12 ? remoteTime - 12 : remoteTime}:{remoteTimeM < 10 ? "0" : ""}{remoteTimeM}{remoteTime >= 12 ? "pm" : "am" }</ThemedText>
     </ThemedView>
     
     <ThemedView style={styles.time}>
@@ -148,10 +150,10 @@ const Clock = () => {
       <ScrollView>
       
       {Array.isArray(tList) && tList.map((h, i) => (
-        <Swipeable key={i} renderButton={() => renderButton(cList[i], h)}>
+        <Swipeable key={i} renderRightActions={() => renderRightActions(cList[i], h)}>
           <ThemedView style={styles.list}>
             <ThemedText style={styles.clockList}>{cList[i]}</ThemedText>
-            <ThemedText key={i} style={styles.clockList}>     {h + remoteTime > 12 ? h + remoteTime - 12 : h + remoteTime}:{remoteTimeM < 10 ? "0" : ""}{remoteTimeM}{h + remoteTime >= 12 ? "pm" : "am"}      </ThemedText>
+            <ThemedText key={i} style={styles.clockList}>     {h + remoteTime > 12 ? (h + remoteTime > 24 ? h + remoteTime - 24 : (h + remoteTime - 12)) : h + remoteTime}:{remoteTimeM < 10 ? "0" : ""}{remoteTimeM}{h + remoteTime > 23 ? (h + remoteTime - 24 >= 12 ? "pm" : "am") : (h + remoteTime >= 12 ? "pm" : "am")}      </ThemedText>
           
           </ThemedView>
         </Swipeable>
@@ -237,13 +239,15 @@ const styles = StyleSheet.create({
       
     },
     time2: {
-      top: '50%',
+      top: '20%',
       left: '10%',
       flexDirection: 'row',
-      width: 300,
+      width: 350,
+      height: 450,
     },
     clockList: {
       fontSize: 30,
+      marginBottom: 10,
 
     },
     topTime: {
