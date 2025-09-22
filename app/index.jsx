@@ -1,5 +1,8 @@
-import { StyleSheet, Image, View } from 'react-native'
+import { StyleSheet, Image, View, TouchableOpacity, Modal} from 'react-native'
 import {Link} from 'expo-router'
+import React, {useState} from "react"
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+
 
 import WClock from '../assets/img/wclock.png'
 import Alarm from '../assets/img/alarm.png'
@@ -10,6 +13,7 @@ import ThemedView from '../components/ThemedView'
 import ThemedText from '../components/ThemedText'
 
 const Home = () => {
+  const [visible, setVisible] = useState(false);
   return (
     <ThemedView style={styles.container}>
 
@@ -18,6 +22,24 @@ const Home = () => {
       
     </ThemedView>
 
+    <ThemedView style={styles.topBar}> 
+      <TouchableOpacity onPress={() => setVisible(true)}>
+      <ThemedText style={[{fontSize: 40}]}>+</ThemedText>
+      </TouchableOpacity>
+    </ThemedView>
+
+    <ThemedView>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={visible}
+        onRequestClose={() => setVisible(false)}>
+        <ThemedView style={styles.newPanel}>
+          <ThemedText>Testing</ThemedText>
+          <TouchableOpacity onPress={() => setVisible(false)}><ThemedText>Back</ThemedText></TouchableOpacity>
+        </ThemedView>
+      </Modal>
+    </ThemedView>
     <ThemedView style={[{position: 'absolute', height:'10%', width: '100%', bottom:0, backgroundColor: 'white', flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center'}]}>
 
     
@@ -68,4 +90,14 @@ const styles = StyleSheet.create({
         flex: 1,
         
     },
+    topBar: {
+      left: '90%',
+      top: '60',
+      fontSize: '20',
+      
+    },
+    newPanel: {
+      top: '100',
+      justifyContent: 'flex-end'
+    }
 })
