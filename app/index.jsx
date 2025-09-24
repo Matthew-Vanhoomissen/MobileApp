@@ -1,4 +1,4 @@
-import { StyleSheet, Image, View, TouchableOpacity, Modal} from 'react-native'
+import { StyleSheet, Image, View, TouchableOpacity, Modal, TouchableHighlight} from 'react-native'
 import {Link} from 'expo-router'
 import React, {useState} from "react"
 import { GestureHandlerRootView } from "react-native-gesture-handler";
@@ -23,6 +23,10 @@ const Home = () => {
     </ThemedView>
 
     <ThemedView style={styles.topBar}> 
+      <TouchableOpacity onPress={() => setVisible(false)}>
+        <ThemedText style={[{fontSize: 40}]}>-</ThemedText>
+      </TouchableOpacity>
+      <ThemedText>                                                                                     </ThemedText>
       <TouchableOpacity onPress={() => setVisible(true)}>
       <ThemedText style={[{fontSize: 40}]}>+</ThemedText>
       </TouchableOpacity>
@@ -36,7 +40,7 @@ const Home = () => {
         onRequestClose={() => setVisible(false)}>
         <ThemedView style={styles.newPanel}>
           <ThemedText>Testing</ThemedText>
-          <TouchableOpacity onPress={() => setVisible(false)}><ThemedText>Back</ThemedText></TouchableOpacity>
+          <TouchableOpacity onPress={() => setVisible(false) }><ThemedText>Back</ThemedText></TouchableOpacity>
         </ThemedView>
       </Modal>
     </ThemedView>
@@ -91,13 +95,16 @@ const styles = StyleSheet.create({
         
     },
     topBar: {
-      left: '90%',
+      left: '4%',
       top: '60',
       fontSize: '20',
+      flexDirection: 'row',
       
     },
     newPanel: {
-      top: '100',
-      justifyContent: 'flex-end'
+      top: '150',
+      justifyContent: 'flex-end',
+      backgroundColor: 'black',
+      
     }
 })
