@@ -1,6 +1,6 @@
-import { StyleSheet, Image, View, TouchableOpacity, Modal, TouchableHighlight} from 'react-native'
+import { StyleSheet, Image, View, TouchableOpacity, Modal, TouchableHighlight, ScrollView} from 'react-native'
 import {Link} from 'expo-router'
-import React, {useState} from "react"
+import {useState, useRef} from "react"
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 
@@ -19,9 +19,9 @@ const Home = () => {
   const scrollRefM = useRef(null);
   const scrollRefH = useRef(null);
 
-    const numbers = [null, ...Array.from({ length: 60}, (_, i) => i), null, null];
-    const hrs = [null, ...Array.from({ length: 12}, (_, i) => i), null, null];
-    const amPm = ["AM", "PM"];
+    const numbers = [null, ...Array.from({ length: 60}, (_, i) => i), null];
+    const hrs = [null, ...Array.from({ length: 12}, (_, i) => i + 1), null];
+    const amPm = ["","AM", "PM", ""];
   return (
     <ThemedView style={styles.container}>
 
@@ -46,34 +46,36 @@ const Home = () => {
         transparent={true}
         visible={visible}
         onRequestClose={() => setVisible(false)}>
+        
+          
         <ThemedView style={styles.newPanel}>
-          <ThemedText>Testing</ThemedText>
-          <TouchableOpacity onPress={() => setVisible(false) }><ThemedText>Back</ThemedText></TouchableOpacity>
+          <ThemedText> </ThemedText>
+          <TouchableOpacity onPress={() => setVisible(false) }><ThemedText >    Back</ThemedText></TouchableOpacity>
         </ThemedView>
 
-        <ThemedView style={styles.timer}>
+        <ThemedView style={styles.alarm}>
       
-          <ScrollView ref={scrollRefH} snapToInterval={60} snapToAlignment="center"decelerationRate="fast" scrollEventThrottle={16} onScroll={setScrollH}>
+          <ScrollView ref={scrollRefH} snapToInterval={60} snapToAlignment="center"decelerationRate="fast" scrollEventThrottle={16} >
             {hrs.map((num, idx) => (
-            <ThemedView key={idx} style={[{height: 60}]}>
+            <ThemedView key={idx} style={[{height: 60, backgroundColor: '#555555'}]}>
               <ThemedText>
                 {num}
               </ThemedText>
             </ThemedView>
             ))}
           </ScrollView>
-          <ScrollView ref={scrollRefM} snapToInterval={60} snapToAlignment="center"decelerationRate="fast" scrollEventThrottle={16} onScroll={setScrollM}>
+          <ScrollView ref={scrollRefM} snapToInterval={60} snapToAlignment="center"decelerationRate="fast" scrollEventThrottle={16} >
             {numbers.map((num, idx) => (
-            <ThemedView key={idx} style={[{height: 60}]}>
+            <ThemedView key={idx} style={[{height: 60,  backgroundColor: '#555555'}]}>
               <ThemedText>
                 {num}
               </ThemedText>
             </ThemedView>
             ))}
           </ScrollView>
-          <ScrollView ref={scrollRefT} snapToInterval={60} snapToAlignment="center"decelerationRate="fast" scrollEventThrottle={16} onScroll={setScroll}>
+          <ScrollView ref={scrollRefT} snapToInterval={60} snapToAlignment="center"decelerationRate="fast" scrollEventThrottle={16} >
             {amPm.map((str, idx) => (
-            <ThemedView key={idx} style={[{height: 60}]}>
+            <ThemedView key={idx} style={[{height: 60,  backgroundColor: '#555555'}]}>
               <ThemedText>
                 {str}
               </ThemedText>
@@ -91,6 +93,7 @@ const Home = () => {
             <ThemedText>secs</ThemedText>
           </ThemedView>
         </ThemedView>
+        
       </Modal>
     </ThemedView>
     <ThemedView style={[{position: 'absolute', height:'10%', width: '100%', bottom:0, backgroundColor: 'white', flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center'}]}>
@@ -153,23 +156,43 @@ const styles = StyleSheet.create({
     newPanel: {
       top: '150',
       justifyContent: 'flex-end',
+      borderTopLeftRadius: 20,   
+      borderTopRightRadius: 20,
+      backgroundColor: '#555555',
+      height: '617',
+      justifyContent: 'flex-start',
     },
     label1: {
       flexDirection: 'row',
       top: '33%',
       left: '7%',
       position: 'absolute', 
+      backgroundColor: '#555555',
     },
     label2: {
       flexDirection: 'row',
       top: '33%',
       left: '40%',
       position: 'absolute',
+      backgroundColor: '#555555',
     },
     label3: {
       flexDirection: 'row',
       top: '33%',
       left: '73%',
       position: 'absolute',
+      backgroundColor: '#555555',
     },
+    alarm: {
+      position: 'absolute',
+      top: '25%',
+      left: '25%',
+      overflow: 'hidden',
+      height: '180',
+      width: '70%',
+      flexDirection: 'row',
+      
+      backgroundColor: 'white',
+  },
+    
 })
