@@ -14,6 +14,14 @@ import ThemedText from '../components/ThemedText'
 
 const Home = () => {
   const [visible, setVisible] = useState(false);
+
+  const scrollRefT = useRef(null);
+  const scrollRefM = useRef(null);
+  const scrollRefH = useRef(null);
+
+    const numbers = [null, ...Array.from({ length: 60}, (_, i) => i), null, null];
+    const hrs = [null, ...Array.from({ length: 12}, (_, i) => i), null, null];
+    const amPm = ["AM", "PM"];
   return (
     <ThemedView style={styles.container}>
 
@@ -32,7 +40,7 @@ const Home = () => {
       </TouchableOpacity>
     </ThemedView>
 
-    <ThemedView>
+    <ThemedView style={[{backgroundColor: 'black'}]}>
       <Modal
         animationType="slide"
         transparent={true}
@@ -41,6 +49,47 @@ const Home = () => {
         <ThemedView style={styles.newPanel}>
           <ThemedText>Testing</ThemedText>
           <TouchableOpacity onPress={() => setVisible(false) }><ThemedText>Back</ThemedText></TouchableOpacity>
+        </ThemedView>
+
+        <ThemedView style={styles.timer}>
+      
+          <ScrollView ref={scrollRefH} snapToInterval={60} snapToAlignment="center"decelerationRate="fast" scrollEventThrottle={16} onScroll={setScrollH}>
+            {hrs.map((num, idx) => (
+            <ThemedView key={idx} style={[{height: 60}]}>
+              <ThemedText>
+                {num}
+              </ThemedText>
+            </ThemedView>
+            ))}
+          </ScrollView>
+          <ScrollView ref={scrollRefM} snapToInterval={60} snapToAlignment="center"decelerationRate="fast" scrollEventThrottle={16} onScroll={setScrollM}>
+            {numbers.map((num, idx) => (
+            <ThemedView key={idx} style={[{height: 60}]}>
+              <ThemedText>
+                {num}
+              </ThemedText>
+            </ThemedView>
+            ))}
+          </ScrollView>
+          <ScrollView ref={scrollRefT} snapToInterval={60} snapToAlignment="center"decelerationRate="fast" scrollEventThrottle={16} onScroll={setScroll}>
+            {amPm.map((str, idx) => (
+            <ThemedView key={idx} style={[{height: 60}]}>
+              <ThemedText>
+                {str}
+              </ThemedText>
+              
+            </ThemedView>
+            ))}
+          </ScrollView>
+          <ThemedView style={styles.label1}>
+            <ThemedText>hours</ThemedText>
+          </ThemedView>
+          <ThemedView style={styles.label2}>
+            <ThemedText>mins</ThemedText>
+          </ThemedView>
+          <ThemedView style={styles.label3}>
+            <ThemedText>secs</ThemedText>
+          </ThemedView>
         </ThemedView>
       </Modal>
     </ThemedView>
@@ -104,7 +153,23 @@ const styles = StyleSheet.create({
     newPanel: {
       top: '150',
       justifyContent: 'flex-end',
-      backgroundColor: 'black',
-      
-    }
+    },
+    label1: {
+      flexDirection: 'row',
+      top: '33%',
+      left: '7%',
+      position: 'absolute', 
+    },
+    label2: {
+      flexDirection: 'row',
+      top: '33%',
+      left: '40%',
+      position: 'absolute',
+    },
+    label3: {
+      flexDirection: 'row',
+      top: '33%',
+      left: '73%',
+      position: 'absolute',
+    },
 })
