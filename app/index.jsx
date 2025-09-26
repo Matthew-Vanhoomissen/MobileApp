@@ -30,6 +30,11 @@ const Home = () => {
   const [minutes, setMinutes] = useState(0);
   const [period, setPeriod] = useState("AM");
 
+  const [hourList, setHourList] = useState([]);
+  const [minuteList, setMinuteList] = useState([]);
+ 
+  
+
   const setScroll = (event) => {
     const offsetY = event.nativeEvent.contentOffset.y;
     const index = Math.round(offsetY / 60); //60 is the item height
@@ -50,9 +55,12 @@ const Home = () => {
   const addAlarm = () => {
     let offset = 0;
     {period === "PM" ? offset = 12 : offset}
-    console.log(hours + offset);
-    console.log(minutes);
-    console.log(period);
+    setHourList(prev => [...prev, hours + offset]);
+    setMinuteList(prev => [...prev, minutes]);
+
+    setMinutes(0);
+    setHours(1);
+    setPeriod("AM");
     setVisible(false);
   }
 
@@ -73,6 +81,16 @@ const Home = () => {
       <TouchableOpacity onPress={() => setVisible(true)}>
       <ThemedText style={[{fontSize: 40}]}>+</ThemedText>
       </TouchableOpacity>
+    </ThemedView>
+    <ThemedView style={styles.alarms}>
+      <ScrollView>
+        {hourList.map((num, index) => (
+          <ThemedView key={index} style={[{height: 60, borderBottomColor: '#555555', borderBottomWidth: '1'}]}>
+            <ThemedText style={[{fontSize: 35}]}>{num > 12 ? num - 12 : num}:{minuteList[index] < 10 ? "0" : ""}{minuteList[index]} {num < 13 ? "AM" : "PM"}</ThemedText>
+            <ThemedText>Name</ThemedText>
+          </ThemedView>
+        ))}
+      </ScrollView>
     </ThemedView>
 
     <ThemedView style={[{backgroundColor: 'black'}]}>
@@ -256,6 +274,12 @@ const styles = StyleSheet.create({
       justifyContent: 'space-around',
       backgroundColor: '#686464ff',
       
+    },
+    alarms: {
+      top: '100',
+      backgroundColor: 'grey',
+      left: '20',
+
     },
     
 })
