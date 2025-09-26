@@ -32,7 +32,7 @@ const Home = () => {
 
   const [hourList, setHourList] = useState([]);
   const [minuteList, setMinuteList] = useState([]);
- 
+  const [textList, setTextList] = useState([]);
   
 
   const setScroll = (event) => {
@@ -50,6 +50,8 @@ const Home = () => {
     const index = Math.round(offsetY / 60);
     setHours(hrs[index + 1])
   }
+
+
   
 
   const addAlarm = () => {
@@ -57,10 +59,14 @@ const Home = () => {
     {period === "PM" ? offset = 12 : offset}
     setHourList(prev => [...prev, hours + offset]);
     setMinuteList(prev => [...prev, minutes]);
+    let text2 = "";
+    {text === "" ? text2 = "Alarm" : text2 = text}
+    setTextList(prev => [...prev, text2]);
 
     setMinutes(0);
     setHours(1);
     setPeriod("AM");
+    setText("");
     setVisible(false);
   }
 
@@ -87,7 +93,7 @@ const Home = () => {
         {hourList.map((num, index) => (
           <ThemedView key={index} style={[{height: 60, borderBottomColor: '#555555', borderBottomWidth: '1'}]}>
             <ThemedText style={[{fontSize: 35}]}>{num > 12 ? num - 12 : num}:{minuteList[index] < 10 ? "0" : ""}{minuteList[index]} {num < 13 ? "AM" : "PM"}</ThemedText>
-            <ThemedText>Name</ThemedText>
+            <ThemedText>{textList[index]}</ThemedText>
           </ThemedView>
         ))}
       </ScrollView>
