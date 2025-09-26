@@ -62,6 +62,7 @@ const Home = () => {
     let text2 = "";
     {text === "" ? text2 = "Alarm" : text2 = text}
     setTextList(prev => [...prev, text2]);
+    
 
     setMinutes(0);
     setHours(1);
