@@ -4,6 +4,7 @@ import {useState, useRef} from "react"
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 
+
 import WClock from '../assets/img/wclock.png'
 import Alarm from '../assets/img/alarm.png'
 import Stopwatch from '../assets/img/stopwatch.png'
@@ -95,7 +96,7 @@ const Home = () => {
           <ThemedView key={index} style={[{height: 60, borderBottomColor: '#555555', borderBottomWidth: '1'}]}>
             <ThemedText style={[{fontSize: 35}]}>{num > 12 ? num - 12 : num}:{minuteList[index] < 10 ? "0" : ""}{minuteList[index]} {num < 13 ? "AM" : "PM"}</ThemedText>
             <ThemedText>{textList[index]}</ThemedText>
-            <Switch></Switch>
+            
           </ThemedView>
         ))}
       </ScrollView>
