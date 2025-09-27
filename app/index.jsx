@@ -1,6 +1,6 @@
 import { Switch, StyleSheet, Image, View, TouchableOpacity, Modal, TouchableHighlight, ScrollView, TextInput} from 'react-native'
 import {Link} from 'expo-router'
-import {useState, useRef} from "react"
+import {useState, useRef, useEffect} from "react"
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 
@@ -36,6 +36,7 @@ const Home = () => {
   const [minuteList, setMinuteList] = useState([]);
   const [textList, setTextList] = useState([]);
   const [toggleList, setToggleList] = useState([]);
+  const [repeatList, setRepeatList] = useState([]);
   
 
   const setScroll = (event) => {
@@ -65,10 +66,45 @@ const Home = () => {
     setToggleList(list4);
   }
 
+  const checkAlarm = () => {
+    const now = new Date();
+    const hours1 = now.getHours();
+    const minutes1 = now.getMinutes();
+
+    for(let i = 0; i < hourList.length; i++) {
+      let tempH = hourList[i];
+      if(tempH === 12) {
+        tempH = 0;
+      }
+      else if(tempH === 24) {
+        tempH = 12;
+      }
+      let tempM = minuteList[i];
+      if(tempH === hours1 && tempM === minutes1 && toggleList[i]) {
+        if(repeatList[i]) {
+          console.log("Alarm goes off but will stay on")
+        }
+        else {
+          console.log("Alarm goes off and stays off");
+          setToggleList(prev => prev.map((val, e) => e === i ? false : val));
+        }
+        
+      }
+    }
+  }
+
+  checkAlarm();
+
+  useEffect(() => {
+    const interval = setInterval(checkAlarm, 5000);
+    return () => clearInterval(interval); // cleanup on unmount
+  }, [hourList, minuteList, toggleList, repeatList]); // dependencies
+
 
   
 
   const addAlarm = () => {
+    setRepeatList(prev => [...prev, isEnabled]);
     let offset = 0;
     {period === "PM" ? offset = 12 : offset}
     setHourList(prev => [...prev, hours + offset]);
