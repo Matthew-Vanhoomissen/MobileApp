@@ -26,6 +26,7 @@ const Home = () => {
 
   const [text, setText] = useState("");
   const [isEnabled, setIsEnabled] = useState(false);
+  const [deletable, canDelete] = useState(false);
   //const [time, setTime] = useState(0);
   const [hours, setHours] = useState(1);
   const [minutes, setMinutes] = useState(0);
@@ -34,6 +35,7 @@ const Home = () => {
   const [hourList, setHourList] = useState([]);
   const [minuteList, setMinuteList] = useState([]);
   const [textList, setTextList] = useState([]);
+  const [toggleList, setToggleList] = useState([]);
   
 
   const setScroll = (event) => {
@@ -50,6 +52,17 @@ const Home = () => {
     const offsetY = event.nativeEvent.contentOffset.y;
     const index = Math.round(offsetY / 60);
     setHours(hrs[index + 1])
+  }
+
+  const removeAlarm = (index) => {
+    const list1 = hourList.filter((_, i) => i !== index);
+    setHourList(list1);
+    const list2 = minuteList.filter((_, i) => i !== index);
+    setMinuteList(list2);
+    const list3 = textList.filter((_, i) => i !== index);
+    setTextList(list3);
+    const list4 = toggleList.filter((_, i) => i !== index);
+    setToggleList(list4);
   }
 
 
@@ -82,7 +95,7 @@ const Home = () => {
     </ThemedView>
 
     <ThemedView style={styles.topBar}> 
-      <TouchableOpacity onPress={() => setVisible(false)}>
+      <TouchableOpacity onPress={() => canDelete(!deletable)}>
         <ThemedText style={[{fontSize: 40}]}>-</ThemedText>
       </TouchableOpacity>
       <ThemedText>                                                                                     </ThemedText>
@@ -93,9 +106,23 @@ const Home = () => {
     <ThemedView style={styles.alarms}>
       <ScrollView>
         {hourList.map((num, index) => (
-          <ThemedView key={index} style={[{height: 60, borderBottomColor: '#555555', borderBottomWidth: '1'}]}>
-            <ThemedText style={[{fontSize: 35}]}>{num > 12 ? num - 12 : num}:{minuteList[index] < 10 ? "0" : ""}{minuteList[index]} {num < 13 ? "AM" : "PM"}</ThemedText>
-            <ThemedText>{textList[index]}</ThemedText>
+          <ThemedView key={index} style={[{height: 60, borderBottomColor: '#555555', borderBottomWidth: '1', flexDirection: 'row'}]}>
+            {deletable && 
+              <TouchableOpacity style={styles.button} onPress={() => removeAlarm(index)}><ThemedText style={[{fontSize: 20, top: '-8'}]}>_</ThemedText></TouchableOpacity> 
+            }
+            
+            <ThemedView>
+              <ThemedText style={[{fontSize: 35}]}> {num > 12 ? num - 12 : num}:{minuteList[index] < 10 ? "0" : ""}{minuteList[index]} {num < 13 ? "AM" : "PM"}</ThemedText>
+              <ThemedText>   {textList[index]}</ThemedText>
+            </ThemedView>
+            <ThemedText>                                 </ThemedText>
+            <Switch style={[{top: '15'}]} value={toggleList[index]} onValueChange={() => {
+              setToggleList(prev => {
+                const newList = [...prev];     // copy old list
+                newList[index] = !newList[index]; // flip this one
+                return newList;
+              });
+            }} trackColor={{ false: "#767577", true: "#f4f3f4" }} thumbColor={toggleList[index] ? "#767577" : "#f4f3f4"} />
             
           </ThemedView>
         ))}
@@ -290,5 +317,15 @@ const styles = StyleSheet.create({
       left: '20',
 
     },
+    button: {
+      borderRadius: 20,
+      width: 40,
+      height: 40,
+      backgroundColor: '#555555',
+      alignItems: 'center',
+      justifyContent: 'center',
+      top: '10',
+      
+  },
     
 })
