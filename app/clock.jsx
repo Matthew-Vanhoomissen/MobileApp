@@ -2,6 +2,7 @@ import { StyleSheet, Text, View, Image, TouchableOpacity, TextInput, ScrollView 
 import {React, useState, useRef, useEffect} from 'react'
 import { Swipeable } from "react-native-gesture-handler";
 import {Link} from 'expo-router'
+import Constants from "expo-constants";
 
 import WClock from '../assets/img/wclock.png'
 import Alarm from '../assets/img/alarm.png'
@@ -15,7 +16,8 @@ import ThemedText from '../components/ThemedText'
 */
 const Clock = () => {
 
-  const APIKey = "AIzaSyC6U2_01lYxMxl_nWr2XCCLBvB95duuVNc";
+  const apiKey = Constants.expoConfig.extra.apiKey;
+  
   //constants for name, time, and error
   const [time, setTime] = useState("");
   const [city, setCity] = useState("");
@@ -45,7 +47,7 @@ const Clock = () => {
       //@throws no city found if nothing is returned
       const geoLoad = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
           city
-        )}&key=${APIKey}`);
+        )}&key=${apiKey}`);
       const geoData = await geoLoad.json();
 
       if(!geoData.results.length) {
@@ -58,7 +60,7 @@ const Clock = () => {
       //sends lat and lng to google maps API and returns json file which is formatted and returned as data
       const currentTime = Math.floor(Date.now() /1000);
       const timeLoad = await fetch(
-        `https://maps.googleapis.com/maps/api/timezone/json?location=${lat},${lng}&timestamp=${currentTime}&key=${APIKey}`
+        `https://maps.googleapis.com/maps/api/timezone/json?location=${lat},${lng}&timestamp=${currentTime}&key=${apiKey}`
       );
       const timeData = await timeLoad.json();
       
