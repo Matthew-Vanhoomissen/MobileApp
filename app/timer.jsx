@@ -15,7 +15,7 @@ import ThemedView from '../components/ThemedView'
 import ThemedText from '../components/ThemedText'
 
 
-
+//Timer that can take input time and count down then alerts when finished
 const Timer = () => {
     //elapsed time
     const [time, setTime] = useState(0);
@@ -43,6 +43,7 @@ const Timer = () => {
     //sound
     const [sound, setSound] = useState();
 
+    //Plays sound when timer finishes
     const playSound = async () => {
       const {sound: loadedSound } = await Audio.Sound.createAsync(
         require('../assets/birds.mp3'),
@@ -68,7 +69,7 @@ const Timer = () => {
     }, [time, hasRun]);
 
     
-
+  //Starts timer based off input and starts interval
   const startTimer = () => {
     
     const currentTime = time > 0 ? time : seconds + minutes*60 + hours*3600;
@@ -92,12 +93,14 @@ const Timer = () => {
     setHasRun(true);
   };
 
+  //Paused interval
   const pauseTimer = () => {
     clearInterval(interval.current);
 
     setRunning(false);
   };
 
+  //Cancels timer and resets variables
   const cancelTimer = () => {
     clearInterval(interval.current);
 
@@ -112,6 +115,8 @@ const Timer = () => {
 
 
 
+  //Scrolling references 
+  //adds to the array when submitted
   const setScroll = (event) => {
     const offsetY = event.nativeEvent.contentOffset.y;
     const index = Math.round(offsetY / ITEM_HEIGHT);
@@ -132,7 +137,7 @@ const Timer = () => {
 
 
 
-
+  //Calculating and formatting
   const secs = Math.floor(time) % 60;
   const mins = Math.floor(time/60) % 60;
   const hour = Math.floor(time/3600);

@@ -13,6 +13,7 @@ import ThemedView from '../components/ThemedView'
 import ThemedText from '../components/ThemedText'
 import ThemedTime from '../components/ThemedTime'
 
+//Stopwatch that will increase time, can pause, and lap the time
 const Stopwatch = () => {
   //elapsed time
   const [time, setTime] = useState(0);
@@ -25,7 +26,7 @@ const Stopwatch = () => {
   //laps
   const [laps, setLaps] = useState([]);
   
-
+  //Starts the interval and keeps track if there was a previous value
   const startStopwatch = () => {
     startTime.current = Date.now() - time * 1000;
 
@@ -36,12 +37,14 @@ const Stopwatch = () => {
     setRunning(true);
   };
   
+  //Stops interval but saves the value
   const pauseStopwatch = () => {
     clearInterval(interval.current);
 
     setRunning(false);
   };
 
+  //Resets to zero
   const resetStopwatch = () => {
     clearInterval(interval.current);
 
@@ -50,6 +53,7 @@ const Stopwatch = () => {
     setRunning(false);
   };
 
+  //When called calculates and formats time to add to array which is displayed
   const setLap = () => {
     const mins = Math.floor(time/60);
     const secs = Math.floor(time*100)/100 % 60;

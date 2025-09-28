@@ -11,7 +11,8 @@ import Timer from '../assets/img/timer.png'
 import ThemedView from '../components/ThemedView'
 import ThemedText from '../components/ThemedText'
 
-
+/* Clock page that utilizes Google Maps API to generate time from input city
+*/
 const Clock = () => {
 
   const APIKey = "AIzaSyC6U2_01lYxMxl_nWr2XCCLBvB95duuVNc";
@@ -40,7 +41,8 @@ const Clock = () => {
     
     try {
       
-      
+      //Retrieves city data latitude and longitude from city name
+      //@throws no city found if nothing is returned
       const geoLoad = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
           city
         )}&key=${APIKey}`);
@@ -50,9 +52,10 @@ const Clock = () => {
         console.log("No City");
         throw new Error("No City Found");
       }
+
       const { lat, lng} = geoData.results[0].geometry.location;
       
-      
+      //sends lat and lng to google maps API and returns json file which is formatted and returned as data
       const currentTime = Math.floor(Date.now() /1000);
       const timeLoad = await fetch(
         `https://maps.googleapis.com/maps/api/timezone/json?location=${lat},${lng}&timestamp=${currentTime}&key=${APIKey}`
@@ -63,6 +66,7 @@ const Clock = () => {
         throw new Error("Timezone API Error");
       }
       
+      //Current location time
       const nowTime = (currentTime + timeData.dstOffset + timeData.rawOffset) * 1000;
       
       
@@ -72,10 +76,11 @@ const Clock = () => {
       
       const hours = Math.floor(Math.floor(Math.floor(nowTime/1000)/60)/60) % 24;
       
+      //subtracts hours off input city to current time to return offset
       const temp = getHourOffset(remoteTime, hours);
       console.log(temp);
       
-      
+      //Offset is stored in an array with the adjacent city String
       settList(prev => [...prev, temp]);
       setcList(prev => [...prev, city]);
       
@@ -92,6 +97,9 @@ const Clock = () => {
     }
   } 
 
+  //Returns offset of two hours with clock wrapping 
+  //@params baseHour is the input city hour and targetHour is the current hour
+  //@returns the diff
   function getHourOffset(baseHour, targetHour) {
     
     let diff = (targetHour - baseHour); 
@@ -106,12 +114,18 @@ const Clock = () => {
 
     return diff;
   }
+
+  //Removes city and time from their arrays
+  //@params city and time
+  
   const deleteCity = (inputCity, inputTime) => {
     setcList(prev => prev.filter(item => item !== inputCity))
     settList(prev => prev.filter(item => item !== inputTime))
-    console.log("Check");
+    
   }
 
+  //Renders delete button when swiped left
+  //@params input city and time to be passed in the delete function
   const renderRightActions = (inputCity, inputTime) => (
     <TouchableOpacity style={styles.deleteButton} onPress={() => deleteCity(inputCity, inputTime)}>
         <ThemedText>Delete</ThemedText>

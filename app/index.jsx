@@ -13,25 +13,30 @@ import Timer from '../assets/img/timer.png'
 import ThemedView from '../components/ThemedView'
 import ThemedText from '../components/ThemedText'
 
+//Alarm page that generates alarms that trigger when that time is reached
 const Home = () => {
   const [visible, setVisible] = useState(false);
 
+  //Scroll references
   const scrollRefT = useRef(null);
   const scrollRefM = useRef(null);
   const scrollRefH = useRef(null);
 
+  //Preset options to choose from
   const numbers = [null, ...Array.from({ length: 60}, (_, i) => i), null];
   const hrs = [null, ...Array.from({ length: 12}, (_, i) => i + 1), null];
   const amPm = ["","AM", "PM", ""];
 
+  //variables used for storing single data points or preseting a selection
   const [text, setText] = useState("");
   const [isEnabled, setIsEnabled] = useState(false);
   const [deletable, canDelete] = useState(false);
-  //const [time, setTime] = useState(0);
+  
   const [hours, setHours] = useState(1);
   const [minutes, setMinutes] = useState(0);
   const [period, setPeriod] = useState("AM");
 
+  //Arrays to store parallel items with the same index
   const [hourList, setHourList] = useState([]);
   const [minuteList, setMinuteList] = useState([]);
   const [textList, setTextList] = useState([]);
@@ -39,6 +44,7 @@ const Home = () => {
   const [repeatList, setRepeatList] = useState([]);
   
 
+  //On scrolls update the value
   const setScroll = (event) => {
     const offsetY = event.nativeEvent.contentOffset.y;
     const index = Math.round(offsetY / 60); //60 is the item height
@@ -55,6 +61,8 @@ const Home = () => {
     setHours(hrs[index + 1])
   }
 
+  //Removes alarm and values from all arrays
+  //@params the index to remove
   const removeAlarm = (index) => {
     const list1 = hourList.filter((_, i) => i !== index);
     setHourList(list1);
@@ -66,12 +74,14 @@ const Home = () => {
     setToggleList(list4);
   }
 
+  //Checks the arrays to see if the time is equal to the current time
   const checkAlarm = () => {
     const now = new Date();
     const hours1 = now.getHours();
     const minutes1 = now.getMinutes();
 
     for(let i = 0; i < hourList.length; i++) {
+      //Formatting for edge cases
       let tempH = hourList[i];
       if(tempH === 12) {
         tempH = 0;
@@ -81,10 +91,13 @@ const Home = () => {
       }
       let tempM = minuteList[i];
       if(tempH === hours1 && tempM === minutes1 && toggleList[i]) {
+        //If it is equals AND the alarm is toggled on it triggers
         if(repeatList[i]) {
+          //If repeat is on it will stay on after alarm triggers
           console.log("Alarm goes off but will stay on")
         }
         else {
+          //If off it will turn off the alarm automatically
           console.log("Alarm goes off and stays off");
           setToggleList(prev => prev.map((val, e) => e === i ? false : val));
         }
@@ -93,6 +106,7 @@ const Home = () => {
     }
   }
 
+  //Checks immediately and checks every 5 seconds
   checkAlarm();
 
   useEffect(() => {
@@ -103,6 +117,7 @@ const Home = () => {
 
   
 
+  //Adds alarm to array and all parallel arrays
   const addAlarm = () => {
     setRepeatList(prev => [...prev, isEnabled]);
     let offset = 0;
@@ -113,7 +128,7 @@ const Home = () => {
     {text === "" ? text2 = "Alarm" : text2 = text}
     setTextList(prev => [...prev, text2]);
     
-
+    //After you add an alarm all selections reset
     setMinutes(0);
     setHours(1);
     setPeriod("AM");
